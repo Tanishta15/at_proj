@@ -1,0 +1,20 @@
+name: at_proj
+description: A simple login/sign-up with MongoDB example
+
+publish_to: "none"
+version: 1.0.0
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  firebase_core: ^2.30.0
+  firebase_auth: ^4.16.0
+  cloud_firestore: ^4.17.5
+  flutter_rating_bar: ^4.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
