@@ -29,7 +29,6 @@ class _SignUpPageState extends State<SignUpPage> {
     final password = _passwordController.text;
     final confirmPassword = _confirmPasswordController.text;
 
-    // ✅ Ensure 'message' always has a value
     String message = "Unknown error occurred.";
 
     if (password != confirmPassword) {
@@ -44,6 +43,7 @@ class _SignUpPageState extends State<SignUpPage> {
         password: password,
       );
 
+      // Store user details in Firestore
       await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
         'username': username,
         'dob': dob,
@@ -51,15 +51,16 @@ class _SignUpPageState extends State<SignUpPage> {
       });
 
       message = "Sign-up successful!";
+
+      Navigator.pushReplacementNamed(context, '/dashboard', arguments: username);
+
     } on FirebaseAuthException catch (e) {
       message = _getErrorMessage(e.code);
+      _showDialogAndRedirect(message);
     } finally {
       setState(() {
         _isLoading = false;
       });
-
-      // ✅ Show dialog and always redirect to dashboard after clicking OK
-      _showDialogAndRedirect(message);
     }
   }
 
@@ -72,8 +73,8 @@ class _SignUpPageState extends State<SignUpPage> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.pop(context); // Close the dialog
-              Navigator.pushReplacementNamed(context, '/dashboard'); // Redirect to dashboard
+              Navigator.pop(context); // Close dialog
+              Navigator.pushReplacementNamed(context, '/dashboard', arguments: "User"); // Default if username missing
             },
             child: const Text("OK"),
           )

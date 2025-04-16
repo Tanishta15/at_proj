@@ -10,10 +10,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
   bool _isLoading = false;
 
   Future<void> _handleLogin() async {
@@ -25,20 +23,21 @@ class _LoginPageState extends State<LoginPage> {
     final password = _passwordController.text;
 
     try {
-      // Firebase Authentication Login
+      // ✅ Firebase Authentication - Sign in user
       UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      // Retrieve username from Firestore
+      // ✅ Retrieve username from Firestore
       DocumentSnapshot userDoc = await FirebaseFirestore.instance
           .collection('users')
           .doc(userCredential.user!.uid)
           .get();
 
-      String username = userDoc['username'];
+      String username = userDoc.exists ? userDoc['username'] : "User";
 
+      // ✅ Redirect to Dashboard with username
       Navigator.pushReplacementNamed(context, '/dashboard', arguments: username);
     } on FirebaseAuthException catch (e) {
       _showErrorDialog(_getErrorMessage(e.code));
@@ -53,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Error"),
+        title: const Text("Login Error"),
         content: Text(message),
         actions: [
           TextButton(
@@ -86,9 +85,15 @@ class _LoginPageState extends State<LoginPage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            TextField(controller: _usernameController, decoration: const InputDecoration(labelText: 'Username')),
-            TextField(controller: _emailController, decoration: const InputDecoration(labelText: 'Email')),
-            TextField(controller: _passwordController, decoration: const InputDecoration(labelText: 'Password'), obscureText: true),
+            TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(labelText: 'Email'),
+            ),
+            TextField(
+              controller: _passwordController,
+              decoration: const InputDecoration(labelText: 'Password'),
+              obscureText: true,
+            ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _isLoading ? null : _handleLogin,
