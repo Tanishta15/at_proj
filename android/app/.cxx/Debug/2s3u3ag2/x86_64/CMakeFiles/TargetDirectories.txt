@@ -1,0 +1,2 @@
+C:/Users/gowri/Desktop/at_proj/android/app/.cxx/Debug/2s3u3ag2/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/gowri/Desktop/at_proj/android/app/.cxx/Debug/2s3u3ag2/x86_64/CMakeFiles/rebuild_cache.dir
