@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../services/firestore_service.dart';
-import '../models/book_model.dart';
+import 'firestore_service.dart';
+import 'book_model.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

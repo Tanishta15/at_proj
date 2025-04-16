@@ -1,109 +1,108 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'signup_page.dart';
+import 'utils/transitions.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class LoginPage extends StatelessWidget {
+  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  bool _isLoading = false;
-
-  Future<void> _handleLogin() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    final email = _emailController.text.trim();
-    final password = _passwordController.text;
-
-    try {
-      // ✅ Firebase Authentication - Sign in user
-      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      // ✅ Retrieve username from Firestore
-      DocumentSnapshot userDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userCredential.user!.uid)
-          .get();
-
-      String username = userDoc.exists ? userDoc['username'] : "User";
-
-      // ✅ Redirect to Dashboard with username
-      Navigator.pushReplacementNamed(context, '/dashboard', arguments: username);
-    } on FirebaseAuthException catch (e) {
-      _showErrorDialog(_getErrorMessage(e.code));
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Login Error"),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("OK"),
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/Widget, lockscreen.jpg'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Center(
+            child: Container(
+              width: 280,
+              padding: EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.brown.shade100.withOpacity(0.8),
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'LOGIN',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Serif',
+                    ),
+                  ),
+                  SizedBox(height: 12),
+                  buildInputField("username", usernameController),
+                  buildInputField("email", emailController),
+                  buildInputField("password", passwordController, obscureText: true),
+                  SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          title: Text("Login Successful!"),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text("OK"),
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.brown.shade400,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                      child: Text("Login →"),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(createRoute(SignupPage()));
+                    },
+                    child: Text(
+                      "don’t have an account? Sign up",
+                      style: TextStyle(
+                        fontStyle: FontStyle.italic,
+                        fontSize: 12,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
           )
         ],
       ),
     );
   }
 
-  String _getErrorMessage(String errorCode) {
-    switch (errorCode) {
-      case 'user-not-found':
-        return 'No account found for this email.';
-      case 'wrong-password':
-        return 'Incorrect password.';
-      case 'invalid-email':
-        return 'Invalid email format.';
-      default:
-        return 'Login failed. Please try again.';
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
-            ),
-            TextField(
-              controller: _passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _isLoading ? null : _handleLogin,
-              child: _isLoading ? const CircularProgressIndicator(color: Colors.white) : const Text('Login'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pushNamed(context, '/signup'),
-              child: const Text("Don't have an account? Sign up"),
-            ),
-          ],
+  Widget buildInputField(String hint, TextEditingController controller, {bool obscureText = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: TextField(
+        controller: controller,
+        obscureText: obscureText,
+        decoration: InputDecoration(
+          hintText: hint,
+          filled: true,
+          fillColor: Colors.orange.shade100.withOpacity(0.6),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
         ),
       ),
     );

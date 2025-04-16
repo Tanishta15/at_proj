@@ -14,9 +14,13 @@ dependencies:
   firebase_auth: ^4.16.0
   cloud_firestore: ^4.17.5
   flutter_rating_bar: ^4.0.1
-  flutter_lints: ^3.0.0
-  fl_chart: ^0.64.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter:
+  assets:
+    - assets/download.jpeg
+    - assets/download.jpg
+    - assets/Widget, lockscreen.jpg
