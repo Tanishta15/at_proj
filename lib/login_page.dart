@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'signup_page.dart';
+import 'dashboard.dart';
 import 'utils/transitions.dart';
 
 class LoginPage extends StatelessWidget {
@@ -34,7 +35,7 @@ class LoginPage extends StatelessWidget {
                   Text(
                     'LOGIN',
                     style: TextStyle(
-                      fontSize: 28,
+                      fontSize: 40,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Serif',
                     ),
@@ -46,28 +47,66 @@ class LoginPage extends StatelessWidget {
                   SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (_) => AlertDialog(
-                          title: Text("Login Successful!"),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: Text("OK"),
-                            )
-                          ],
-                        ),
-                      );
+                      String username = usernameController.text.trim();
+                      String email = emailController.text.trim();
+                      String password = passwordController.text.trim();
+
+                      if (username.isNotEmpty &&
+                          email.isNotEmpty &&
+                          password.isNotEmpty) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Success 🎉"),
+                            content: Text("Login successful!"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context); // Close dialog
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                                  );
+                                },
+                                child: Text("Continue"),
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Oops!"),
+                            content: Text("Please fill in all the fields correctly."),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text("OK"),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.brown.shade400,
+                      backgroundColor: Color(0xFFEACCA5),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24),
                       ),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                      child: Text("Login →"),
+                      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 12),
+                      child: Center(
+                        child: Text(
+                          "Login →",
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   SizedBox(height: 10),
