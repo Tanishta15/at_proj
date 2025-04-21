@@ -1,29 +1,40 @@
 name: at_proj
 description: A simple login/sign-up with MongoDB example
 
-publish_to: "none"
-version: 1.0.0
+publish_to: 'none'
+
+version: 1.0.0+1
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
+  sdk: '>=3.1.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: ^2.24.2
-  firebase_auth: ^4.16.0
-  cloud_firestore: ^4.5.0
+  firebase_core: ^2.24.2  # Ensure compatibility with firebase_core ^2.x.x
+  firebase_auth: ^4.6.0
+  cloud_firestore: ^4.17.5  # Downgrade to ensure compatibility with firebase_core
   flutter_rating_bar: ^4.0.1
-  lottie: ^2.7.0
-
+  lottie: ^2.6.0
+  image_picker: ^0.8.7
+  firebase_storage: ^11.6.5
+  permission_handler: ^10.4.0
+  charts_flutter: ^0.12.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
 flutter:
+  uses-material-design: True
+
   assets:
     - assets/download.jpeg
     - assets/download.jpg
     - assets/Widget, lockscreen.jpg
     - assets/Book lover Wallpaper.jpg
     - assets/Animation - 1744914550036.json
+    - assets/book1.jpeg
+    - assets/book2.jpeg
+    - assets/book3.jpeg
+
+include: package:flutter_lints/flutter.yaml
