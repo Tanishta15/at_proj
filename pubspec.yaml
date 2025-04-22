@@ -17,7 +17,7 @@ dependencies:
   firebase_storage: ^11.6.5
   lottie: ^2.6.0
   image_picker: ^1.1.0
-
+  charts_flutter: ^0.12.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -29,5 +29,10 @@ flutter:
     - assets/download.jpg
     - assets/Widget, lockscreen.jpg
     - assets/Book lover Wallpaper.jpg
+    - assets/book1.jpeg
+    - assets/book2.jpeg
+    - assets/book3.jpeg
+    - assets/book4.jpeg
+    - assets/book5.jpeg
 
 

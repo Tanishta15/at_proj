@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-// Import the tab screens (create these in separate files or below)
 import 'tabs/home_tab.dart';
 import 'tabs/search_tab.dart';
 import 'tabs/stats_tab.dart';
@@ -16,11 +14,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
-  final List<Widget> _tabs =  [
-    HomeTab(),        // Home Tab
-    SearchTab(),      // Search Tab
-    StatsTab(),       // Stats Tab
-    ProfileTab(),     // Profile Tab
+  final List<Widget> _tabs = [
+    const HomeTab(),
+    const SearchTab(),
+    const StatsTab(),
+    const ProfileTab(),
   ];
 
   @override
@@ -41,7 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Stack(
         children: [
-          // Background wallpaper
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
@@ -50,13 +47,12 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          // Main content for the selected tab
           _tabs[_currentIndex],
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Add FAB action here (e.g., to add a book)
+          // FAB action (like adding a book)
         },
         backgroundColor: Colors.pinkAccent,
         child: const Icon(Icons.add, color: Colors.white),
