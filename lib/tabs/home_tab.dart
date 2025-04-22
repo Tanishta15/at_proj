@@ -1,11 +1,20 @@
+import 'package:at_proj/tabs/pdfviewer.dart';
 import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
+import 'pdfviewer.dart';
+
 class HomeTab extends StatelessWidget {
-  const HomeTab({super.key});
+  final List<Map<String, String>> books = [
+    {'title': 'Hooked', 'path': 'assets/book_sample.pdf'},
+    {'title': 'Things We Never Got Over', 'path': 'assets/book_sample1.pdf'},
+  ];
+  HomeTab({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text('Books')),
       body: SafeArea(
         child: Stack(
           children: [
@@ -30,7 +39,8 @@ class HomeTab extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   _bookCard(
-                    image: 'assets/book4.jpeg',
+                    context: context,
+                    image: 'assets/book1.jpeg',
                     label: 'Continue\nPart 38',
                   ),
                   const SizedBox(height: 24),
@@ -44,7 +54,7 @@ class HomeTab extends StatelessWidget {
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: [
-                        _topPickCard('assets/book1.jpeg', 'Romance'),
+                        _topPickCard('assets/book4.jpeg', 'Romance'),
                         _topPickCard('assets/book2.jpeg', 'Friendship'),
                         _topPickCard('assets/book3.jpeg', 'Romance'),
                       ],
@@ -63,6 +73,31 @@ class HomeTab extends StatelessWidget {
                       _top10Card('3', 'assets/book1.jpeg', 'Contemporary romance'),
                     ],
                   ),
+                  const SizedBox(height: 24),
+                  const Text(
+                    'Books List',
+                    style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 12),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: books.length,
+                    itemBuilder: (context, index) {
+                      final book = books[index];
+                      return ListTile(
+                        title: Text(book['title']!),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PdfViewerScreen(pdfAssetPath: book['path']!),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
@@ -72,24 +107,45 @@ class HomeTab extends StatelessWidget {
     );
   }
 
-  Widget _bookCard({required String image, required String label}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          width: 120,
-          height: 180,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            image: DecorationImage(image: AssetImage(image), fit: BoxFit.cover),
+  Widget _bookCard({
+    required BuildContext context,
+    required String image,
+    required String label,
+  }) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const PdfViewerScreen(pdfAssetPath: 'assets/book_sample.pdf',),
           ),
-        ),
-        const SizedBox(height: 6),
-        Text(
-          label,
-          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-      ],
+        );
+
+      },
+        child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 120,
+            height: 180,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              image: DecorationImage(
+                image: AssetImage(image),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            label,
+            style: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
